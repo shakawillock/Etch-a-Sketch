@@ -1,5 +1,5 @@
 let container = document.querySelector('.container');
-let btnClear = document.querySelector('.btn-clear');
+let changeSizeBtn = document.querySelector('.btn-change-size');
 
 function changeColor() {
     let divs = Array.from(container.children);
@@ -16,37 +16,44 @@ function changeColor() {
     }); 
 }
 
-for (let i = 1; i <= 256; i++) {
+function createSquares() {
+    for (let i = 1; i <= 256; i++) {
     let div = document.createElement('div');
-
     div.className = 'flex-item';
+
     container.style.gridTemplateColumns = `repeat(16, 1fr)`;
-    container.appendChild(div);
+    container.append(div);
 
     changeColor();
+	}		
 }
 
-btnClear.addEventListener('click', () => {
+function changeSquareSize(grid, squares) {
+	for (let i = 1; i <= grid; i++) {
+		let div = document.createElement('div');
+		div.className = 'flex-item';
+		container.style.gridTemplateColumns = `repeat(${squares}, 1fr)`;
+		container.appendChild(div);
+	}
+}
+
+changeSizeBtn.addEventListener('click', () => {
     container.innerHTML = '';
     
     let userInput = +prompt('Please enter how many squares you want');
 
     while (true) {
-        if (userInput > 100) {
-            userInput = +prompt('Please enter how many squares you want');
+        if (userInput > 100 || Number.isNaN(userInput)) {
+            userInput = +prompt('Please enter a number from 1 to 100');
         } else if (userInput <= 100) {
             break;
-        }
+        } 
     }
 
     let grid = userInput * userInput;
 
-    for (let i = 1; i <= grid; i++) {
-        let div = document.createElement('div');
-        div.className = 'flex-item';
-        container.style.gridTemplateColumns = `repeat(${userInput}, 1fr)`;
-        container.appendChild(div);
-    }
-
+		changeSquareSize(grid, userInput);
     changeColor();
 });
+
+createSquares()
